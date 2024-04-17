@@ -14,7 +14,7 @@ st.set_page_config(
 st.title('🥾 VAM content checker')
 st.write('## A first release of an app to help validate the data captured for each walk. ')
 # get walks data
-walk_file= 'https://raw.githubusercontent.com/clairebyrne/vam_data_validation_viewer/blob/main/WALKS_17042024.csv'
+walk_file= 'https://raw.githubusercontent.com/clairebyrne/vam_data_validation_viewer/main/WALKS_17042024.csv'
 walks = pd.read_csv(walk_file, usecols=['Name', 'GeneralDescription', 'GeoJson', 'ShapeName', 'StartLocationLat', 'StartLocationLng', 'EndLocationLat', 'EndLocationLng', 'CoverImage', 
 'Duration', 'Distance', 'Grading', 'Height', 'Ascent', 'Gear', 'Safety','CarparkGettingStart',	'WayMarked', 'DogsAllowed', 'Facilities', 'Accessible', 'AccessibleToilet', 'AccessibleTerrainDescription', 'NearestCarpark'])
 walks= walks.dropna(how='all')
