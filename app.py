@@ -4,7 +4,8 @@ import folium
 from streamlit_folium import st_folium
 import os
 import gpxpy
-from app_fncs import prep_gpx, make_map
+import app_fncs
+#from app_fncs import prep_gpx, make_map
 
 st.set_page_config(
     page_title="VAM content checker",
@@ -52,10 +53,10 @@ with col[0]:
 with col[1]:
     if len(selected_walk_details.GeoJson.iloc[0])>1:
         gpx_file= os.path.join(gpx_dir, selected_walk_details.GeoJson.iloc[0])
-        gpx_pt_tpl, centre = prep_gpx(gpx_file)
+        gpx_pt_tpl, centre = app_fncs.prep_gpx(gpx_file)
         start_point = [selected_walk_details.iloc[0, 4], selected_walk_details.iloc[0, 5]]
         end_point = [selected_walk_details.iloc[0, 6], selected_walk_details.iloc[0, 7]]
-        map = make_map(gpx_pt_tpl, centre, start_point, end_point)
+        map = app_fncs.make_map(gpx_pt_tpl, centre, start_point, end_point)
         st_data = st_folium(map, width='100%')
 
 with col[2]:
