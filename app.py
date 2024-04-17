@@ -22,7 +22,7 @@ walks= walks.dropna(how='all')
 walks = walks.dropna(subset='GeoJson')
 
 # set gpx folder location
-gpx_dir = r'https://raw.githubusercontent.com/clairebyrne/vam_data_validation_viewer/tree/main/gpx'
+gpx_dir = r'https://raw.githubusercontent.com/clairebyrne/vam_data_validation_viewer/main/gpx/'
 
 
 # get list of walks from data
