@@ -4,8 +4,32 @@ import folium
 from streamlit_folium import st_folium
 import os
 import gpxpy
-import app_fncs
-#from app_fncs import prep_gpx, make_map
+# import app_fncs
+# from app_fncs import prep_gpx, make_map
+
+def prep_gpx(gpxData):
+    '''adapted from 
+    https://www.kaggle.com/code/paultimothymooney/overlay-gpx-route-on-osm-map-using-folium'''
+    gpx_file = open(gpxData, 'r')
+    gpx = gpxpy.parse(gpx_file)
+    gpx_pt_tpl = []
+    for track in gpx.tracks:
+        for segment in track.segments:        
+            for point in segment.points:
+                gpx_pt_tpl.append(tuple([point.latitude, point.longitude]))
+    latitude = sum(p[0] for p in gpx_pt_tpl)/len(gpx_pt_tpl)
+    longitude = sum(p[1] for p in gpx_pt_tpl)/len(gpx_pt_tpl)
+    centre = [latitude, longitude]
+
+    return gpx_pt_tpl, centre
+
+
+def make_map(gpx_pt_tpl, centre, start_point, end_point):
+    myMap = folium.Map(location=centre, zoom_start=14)
+    folium.PolyLine(gpx_pt_tpl, color="red", weight=2.5, opacity=1).add_to(myMap)
+    folium.Marker(start_point, icon=folium.Icon(color='green'), popup="start point", tooltip="Start point").add_to(myMap)
+    folium.Marker(end_point, icon=folium.Icon(color='red'), popup="end point", tooltip="end point").add_to(myMap)
+    return myMap
 
 st.set_page_config(
     page_title="VAM content checker",
@@ -33,7 +57,7 @@ selected_walk = st.selectbox(label='Select a walk from the dropdown list ...', o
 selected_walk_details = walks[walks['Name']==selected_walk]
 
 st.write('Walk description:', '  \n', selected_walk_details.iloc[0,1])
-st.dataframe(selected_walk_details)
+# st.dataframe(selected_walk_details)
 
 col = st.columns((2, 5, 2), gap='medium')
 
@@ -53,10 +77,11 @@ with col[0]:
 with col[1]:
     if len(selected_walk_details.GeoJson.iloc[0])>1:
         gpx_file= os.path.join(gpx_dir, selected_walk_details.GeoJson.iloc[0])
-        gpx_pt_tpl, centre = app_fncs.prep_gpx(gpx_file)
+        st.write(gpx_file)
+        gpx_pt_tpl, centre = prep_gpx(gpx_file)
         start_point = [selected_walk_details.iloc[0, 4], selected_walk_details.iloc[0, 5]]
         end_point = [selected_walk_details.iloc[0, 6], selected_walk_details.iloc[0, 7]]
-        map = app_fncs.make_map(gpx_pt_tpl, centre, start_point, end_point)
+        map = make_map(gpx_pt_tpl, centre, start_point, end_point)
         st_data = st_folium(map, width='100%')
 
 with col[2]:
