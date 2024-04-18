@@ -77,7 +77,8 @@ with col[0]:
 
 with col[1]:
     if len(selected_walk_details.GeoJson.iloc[0])>1:
-        gpx_file= os.path.join(gpx_dir, selected_walk_details.GeoJson.iloc[0])
+        gpx_file = f'{gpx_dir}{selected_walk_details.GeoJson.iloc[0]}'
+        # gpx_file= os.path.join(gpx_dir, selected_walk_details.GeoJson.iloc[0])
         st.write(gpx_file)
         gpx_pt_tpl, centre = prep_gpx(gpx_file)
         start_point = [selected_walk_details.iloc[0, 4], selected_walk_details.iloc[0, 5]]
