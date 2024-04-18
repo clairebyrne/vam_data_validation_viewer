@@ -48,8 +48,6 @@ walks = walks.dropna(subset='GeoJson')
 
 # set gpx folder location
 gpx_dir = "./gpx/"
-#r'https://raw.githubusercontent.com/clairebyrne/vam_data_validation_viewer/main/gpx'
-
 
 # get list of walks from data
 walklist  = list(walks.Name.unique())
@@ -58,7 +56,6 @@ selected_walk = st.selectbox(label='Select a walk from the dropdown list ...', o
 selected_walk_details = walks[walks['Name']==selected_walk]
 
 st.write('Walk description:', '  \n', selected_walk_details.iloc[0,1])
-# st.dataframe(selected_walk_details)
 
 col = st.columns((2, 5, 2), gap='medium')
 
@@ -78,8 +75,6 @@ with col[0]:
 with col[1]:
     if len(selected_walk_details.GeoJson.iloc[0])>1:
         gpx_file = f'{gpx_dir}{selected_walk_details.GeoJson.iloc[0]}'
-        # gpx_file= os.path.join(gpx_dir, selected_walk_details.GeoJson.iloc[0])
-        st.write(gpx_file)
         gpx_pt_tpl, centre = prep_gpx(gpx_file)
         start_point = [selected_walk_details.iloc[0, 4], selected_walk_details.iloc[0, 5]]
         end_point = [selected_walk_details.iloc[0, 6], selected_walk_details.iloc[0, 7]]
